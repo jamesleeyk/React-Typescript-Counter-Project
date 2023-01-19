@@ -1,24 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import { useReadyTimer } from './useReadyTimer';
 
-function App() {
+const App: React.FC = () => {
+  
+  const [count, setCount] = useState(0);
+  const [clearCount, setClearCount] = useState(0);
+  const [btnDisabled, setBtnDisabled] = useState(true);
+
+  const increment = () => {
+    setCount(count + 1);
+  }
+
+  const clear = () => {
+    setCount(0);
+    setClearCount(clearCount + 1);
+  }
+
+  const {secondsPassed} = useReadyTimer();
+
+  useEffect(() => {
+    if(secondsPassed >= 5) {
+      setBtnDisabled(false);
+    }
+    }, [secondsPassed]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <span className="heading">James' Counter</span>
+      <br />
+      <br />
+      <div className="counter">
+        secondspassed: {secondsPassed}
+        <br />
+        <br />
+        Count: {count}
+        <br />
+        <br />
+        <button className="counter__inc-btn" onClick={increment} disabled={btnDisabled}>Increment</button>
+        <button className="counter__clear-btn" onClick={clear} disabled={btnDisabled}>Clear</button>
+        <br />
+        <br />
+        Number of times you clicked clear: {clearCount}
+      </div>
     </div>
   );
 }
